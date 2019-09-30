@@ -13,7 +13,7 @@ export class BooksService {
   }
 
   getBook(bookID: string): Promise<any> {
-    let id = Number(bookID);
+    const id = Number(bookID);
     return new Promise(resolve => {
       const book = this.books.find(book => book.id === id);
       if (!book) {
@@ -31,9 +31,9 @@ export class BooksService {
   }
 
   deleteBook(bookID: string): Promise<any> {
-    let id = Number(bookID);
+    const id = Number(bookID);
     return new Promise(resolve => {
-      let index = this.books.findIndex(book => book.id === id);
+      const index = this.books.findIndex(book => book.id === id);
       if (index === -1) {
         throw new HttpException('Livro não existe!', 404);
       }
