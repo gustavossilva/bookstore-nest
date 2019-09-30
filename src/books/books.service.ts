@@ -1,44 +1,36 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { BOOKS } from '../mocks/books.mock';
-import { CreateBookDTO } from './dto/create-book.dto';
+import { Book } from './interfaces/book.interface';
 
 @Injectable()
 export class BooksService {
   books = BOOKS;
 
-  getBooks(): Promise<any> {
-    return new Promise(resolve => {
-      resolve(this.books);
-    });
+  getBooks(): Book[] {
+    return this.books
   }
 
-  getBook(bookID: string): Promise<any> {
+  getBook(bookID: string): Book {
     const id = Number(bookID);
-    return new Promise(resolve => {
       const book = this.books.find(book => book.id === id);
       if (!book) {
         throw new HttpException('Livro não exste!', 404);
       }
-      resolve(book);
-    });
+      return book;
   }
 
-  addBook(book: CreateBookDTO): Promise<any> {
-    return new Promise(resolve => {
+  addBook(book: Book): Book[]{
       this.books.push(book);
-      resolve(this.books);
-    })
+      return this.books;
   }
 
-  deleteBook(bookID: string): Promise<any> {
+  deleteBook(bookID: string): Book[] {
     const id = Number(bookID);
-    return new Promise(resolve => {
       const index = this.books.findIndex(book => book.id === id);
       if (index === -1) {
         throw new HttpException('Livro não existe!', 404);
       }
       this.books.splice(index, 1);
-      resolve (this.books);
-    })
+      return this.books;
   }
 }

@@ -9,32 +9,29 @@ import {
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDTO } from './dto/create-book.dto';
+import { Book } from './interfaces/book.interface';
 
 @Controller('books')
 export class BooksController {
   constructor(private booksService: BooksService) {}
 
   @Get()
-  async getBooks() {
-    const books = await this.booksService.getBooks();
-    return books;
+  async getBooks(): Promise<Book[]> {
+    return this.booksService.getBooks();
   }
 
   @Get(':bookID')
-  async getBook(@Param('bookID') bookID) {
-    const book = await this.booksService.getBook(bookID);
-    return book;
+  async getBook(@Param('bookID') bookID): Promise<Book> {
+    return this.booksService.getBook(bookID);
   }
 
   @Post()
-  async addBook(@Body() createBookDTO: CreateBookDTO) {
-    const book = await this.booksService.addBook(createBookDTO);
-    return book;
+  async addBook(@Body() createBookDTO: CreateBookDTO): Promise<Book[]> {
+    return this.booksService.addBook(createBookDTO);
   }
 
   @Delete()
-  async deleteBook(@Query() query) {
-    const books = await this.booksService.deleteBook(query.bookID);
-    return books;
+  async deleteBook(@Query() query): Promise<Book[]> {
+    return this.booksService.deleteBook(query.bookID);
   }
 }
