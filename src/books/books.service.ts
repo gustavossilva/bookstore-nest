@@ -1,5 +1,6 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { BOOKS } from '../mocks/books.mock';
+import { CreateBookDTO } from './dto/create-book.dto';
 
 @Injectable()
 export class BooksService {
@@ -22,7 +23,7 @@ export class BooksService {
     });
   }
 
-  addBook(book: any): Promise<any> {
+  addBook(book: CreateBookDTO): Promise<any> {
     return new Promise(resolve => {
       this.books.push(book);
       resolve(this.books);

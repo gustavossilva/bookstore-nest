@@ -21,6 +21,7 @@ export class BooksController {
     @Post()
     async addBook(@Body() createBookDTO: CreateBookDTO) {
         const book = await this.booksService.addBook(createBookDTO);
+        return book;
     }
 
     @Delete()
