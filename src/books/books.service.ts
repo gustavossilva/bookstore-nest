@@ -1,6 +1,11 @@
 import { Injectable, HttpException } from '@nestjs/common';
+import * as dayjs from 'dayjs';
 import { BOOKS } from '../mocks/books.mock';
 import { Book } from './interfaces/book.interface';
+
+import * as isBetween from 'dayjs/plugin/isBetween';
+
+dayjs.extend(isBetween);
 
 @Injectable()
 export class BooksService {
@@ -33,4 +38,25 @@ export class BooksService {
       this.books.splice(index, 1);
       return this.books;
   }
+
+  getBookByDate(initialDate: string, finalDate:string): Book[] {
+    const initDate = dayjs(initialDate).format('YYYY-MM-DD');
+    const finDate = dayjs(finalDate).format('YYYY-MM-DD');   
+    
+    if(initDate === 'Invalid Date' || finDate === 'Invalid Date') {
+      throw new HttpException('Formato de data inválido. Formato correto: YYYY-MM-DD', 400);
+    }
+
+    let books = this.getBooks();
+
+    books = books.filter(book => {
+        return dayjs(book.date).isBetween(initDate, finDate, null, '[]')
+      });
+    
+    if (books.length <= 0) {
+       throw new HttpException('Livro não encontrado!', 404);
+    }
+
+      return books;
+    }
 }
