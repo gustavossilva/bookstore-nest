@@ -6,10 +6,12 @@ import {
   Body,
   Delete,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDTO } from './dto/create-book.dto';
 import { Book } from './interfaces/book.interface';
+import { FilterBookDTO } from './dto/filter-book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -18,6 +20,11 @@ export class BooksController {
   @Get()
   async getBooks(): Promise<Book[]> {
     return this.booksService.getBooks();
+  }
+
+  @Get('/date')
+  async getBooksPerDate(@Query(ValidationPipe) filterDto: FilterBookDTO): Promise<Book[]> {
+    return this.booksService.getBooksFilter(filterDto);
   }
 
   @Get(':bookID')

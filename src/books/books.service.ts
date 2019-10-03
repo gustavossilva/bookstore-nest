@@ -1,6 +1,8 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { BOOKS } from '../mocks/books.mock';
 import { Book } from './interfaces/book.interface';
+import { FilterBookDTO } from './dto/filter-book.dto';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class BooksService {
@@ -8,6 +10,19 @@ export class BooksService {
 
   getBooks(): Book[] {
     return this.books
+  }
+
+  getBooksFilter(filterDto: FilterBookDTO): Book[] {
+    const { initialDate, endDate } = filterDto;
+
+    let books = this.getBooks()
+
+    books = books.filter(book => {
+      return dayjs(book.date).valueOf() >= dayjs(initialDate).valueOf() &&
+             dayjs(book.date).valueOf() <= dayjs(endDate).valueOf()
+    });
+
+    return books;
   }
 
   getBook(bookID: string): Book {
